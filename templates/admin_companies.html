@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<div id="app">
+
 <h3>Company Registrations</h3>
 
 <table class="table table-bordered mt-4">
@@ -13,34 +15,52 @@
 <th>Action</th>
 </tr>
 
-{% for company in companies %}
+<tr v-for="company in companies" :key="company.id">
 
-<tr>
-<td>{{ company.id }}</td>
-<td>{{ company.company_name }}</td>
+<td>[[ company.id ]]</td>
+<td>[[ company.company_name ]]</td>
 
 <td>
-{% if company.approved %}
-Approved
-{% else %}
-Pending
-{% endif %}
+<span v-if="company.approved">Approved</span>
+<span v-else>Pending</span>
 </td>
 
 <td>
-{% if not company.approved %}
-<a href="/admin/approve_company/{{ company.id }}" class="btn btn-success btn-sm">
+
+<a v-if="!company.approved"
+:href="'/admin/approve_company/' + company.id"
+class="btn btn-success btn-sm">
+
 Approve
+
 </a>
-{% endif %}
+
 </td>
 
 </tr>
 
-{% endfor %}
-
 </table>
 
 <a href="/admin/dashboard" class="btn btn-secondary">Back</a>
+
+</div>
+
+<script>
+
+const { createApp } = Vue
+
+createApp({
+
+delimiters: ['[[', ']]'],
+
+data() {
+return {
+companies: {{ companies | tojson }}
+}
+}
+
+}).mount("#app")
+
+</script>
 
 {% endblock %}

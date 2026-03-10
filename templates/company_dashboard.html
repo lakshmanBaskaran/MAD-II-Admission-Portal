@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<div id="app">
+
 <h3>Company Dashboard</h3>
 
 <hr>
@@ -47,24 +49,53 @@
 <th>Applications</th>
 </tr>
 
-{% for drive in drives %}
+<tr v-for="drive in drives" :key="drive.id">
 
-<tr>
+<td>[[ drive.id ]]</td>
 
-<td>{{ drive.id }}</td>
-<td>{{ drive.job_title }}</td>
-<td>{{ drive.status }}</td>
+<td>[[ drive.job_title ]]</td>
 
 <td>
-<a href="/company/applications/{{ drive.id }}" class="btn btn-sm btn-info">
+<span v-if="drive.status == 'Approved'" class="badge bg-success">
+Approved
+</span>
+
+<span v-else class="badge bg-warning text-dark">
+Pending
+</span>
+</td>
+
+<td>
+<a :href="'/company/applications/' + drive.id"
+class="btn btn-sm btn-info">
+
 View Applications
+
 </a>
 </td>
 
 </tr>
 
-{% endfor %}
-
 </table>
+
+</div>
+
+<script>
+
+const { createApp } = Vue
+
+createApp({
+
+delimiters:['[[',']]'],
+
+data(){
+return{
+drives: {{ drives | tojson }}
+}
+}
+
+}).mount("#app")
+
+</script>
 
 {% endblock %}

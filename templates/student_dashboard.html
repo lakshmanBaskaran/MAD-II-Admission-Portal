@@ -1,44 +1,99 @@
 {% extends "layout.html" %}
-
 {% block content %}
+
+<div id="app">
 
 <h3>Student Dashboard</h3>
 
-<a href="/student/applications" class="btn btn-primary mb-3">
-View My Applications
+<div class="mb-3">
+
+<a href="/student/applications" class="btn btn-primary">
+My Applications
 </a>
+<a href="/student/profile" class="btn btn-secondary">
+My Profile
+</a>
+<a href="/student/export" class="btn btn-warning">
+Export CSV
+</a>
+
+</div>
+
+<input v-model="search" class="form-control mb-3"
+placeholder="Search job title">
 
 <table class="table table-bordered">
 
 <tr>
-<th>Drive ID</th>
-<th>Job Title</th>
+<th>ID</th>
+<th>Job</th>
 <th>Description</th>
 <th>Eligibility</th>
 <th>Deadline</th>
 <th>Action</th>
 </tr>
 
-{% for drive in drives %}
+<tr v-for="drive in filteredDrives" :key="drive.id">
 
-<tr>
-
-<td>{{ drive.id }}</td>
-<td>{{ drive.job_title }}</td>
-<td>{{ drive.job_description }}</td>
-<td>{{ drive.eligibility_criteria }}</td>
-<td>{{ drive.application_deadline }}</td>
+<td>[[ drive.id ]]</td>
+<td>[[ drive.job_title ]]</td>
+<td>[[ drive.job_description ]]</td>
+<td>[[ drive.eligibility_criteria ]]</td>
+<td>[[ drive.application_deadline ]]</td>
 
 <td>
-<a href="/student/apply/{{ drive.id }}" class="btn btn-success btn-sm">
+
+<a v-if="isOpen(drive.application_deadline)"
+:href="'/student/apply/' + drive.id"
+class="btn btn-success btn-sm">
+
 Apply
+
 </a>
+
+<span v-else class="badge bg-danger">
+Closed
+</span>
+
 </td>
 
 </tr>
 
-{% endfor %}
-
 </table>
+
+</div>
+
+<script>
+
+const { createApp } = Vue
+
+createApp({
+
+delimiters: ['[[', ']]'],
+
+data(){
+return{
+search:"",
+drives: {{ drives | tojson }}
+}
+},
+
+computed:{
+filteredDrives(){
+return this.drives.filter(d =>
+d.job_title.toLowerCase().includes(this.search.toLowerCase())
+)
+}
+},
+
+methods:{
+isOpen(deadline){
+return new Date(deadline) > new Date()
+}
+}
+
+}).mount("#app")
+
+</script>
 
 {% endblock %}

@@ -9,7 +9,7 @@ from routes.auth import auth_bp
 from routes.admin import admin_bp
 from routes.company import company_bp
 from routes.student import student_bp
-
+from services.cache import cache
 
 def create_app():
     app = Flask(__name__)
@@ -17,7 +17,7 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
-
+    cache.init_app(app)
     # REGISTER BLUEPRINTS
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)

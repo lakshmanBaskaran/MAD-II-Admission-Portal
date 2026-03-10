@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
-
 {% block content %}
+
+<div id="app">
 
 <h3>Placement Drives</h3>
 
-<table class="table table-bordered mt-4">
+<table class="table table-bordered">
 
 <tr>
 <th>ID</th>
@@ -13,30 +14,61 @@
 <th>Action</th>
 </tr>
 
-{% for drive in drives %}
+<tr v-for="drive in drives">
 
-<tr>
-<td>{{ drive.id }}</td>
-<td>{{ drive.job_title }}</td>
+<td>[[ drive.id ]]</td>
+<td>[[ drive.job_title ]]</td>
 
-<td>{{ drive.status }}</td>
+<td>
+<span v-if="drive.status=='Approved'"
+class="badge bg-success">
+Approved
+</span>
+
+<span v-else
+class="badge bg-warning">
+Pending
+</span>
+</td>
 
 <td>
 
-{% if drive.status != "Approved" %}
-<a href="/admin/approve_drive/{{ drive.id }}" class="btn btn-success btn-sm">
+<a v-if="drive.status!='Approved'"
+:href="'/admin/approve_drive/' + drive.id"
+class="btn btn-success btn-sm">
+
 Approve
+
 </a>
-{% endif %}
 
 </td>
 
 </tr>
 
-{% endfor %}
-
 </table>
 
-<a href="/admin/dashboard" class="btn btn-secondary">Back</a>
+<a href="/admin/dashboard" class="btn btn-secondary">
+Back
+</a>
+
+</div>
+
+<script>
+
+const { createApp } = Vue
+
+createApp({
+
+delimiters:['[[',']]'],
+
+data(){
+return{
+drives: {{ drives | tojson }}
+}
+}
+
+}).mount("#app")
+
+</script>
 
 {% endblock %}

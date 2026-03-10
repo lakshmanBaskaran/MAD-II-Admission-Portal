@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<div id="app">
+
 <h3>All Applications</h3>
 
 <table class="table table-bordered mt-4">
@@ -14,20 +16,41 @@
 <th>Applied On</th>
 </tr>
 
-{% for app in applications %}
+<tr v-for="app in applications" :key="app.id">
 
-<tr>
-<td>{{ app.id }}</td>
-<td>{{ app.student_id }}</td>
-<td>{{ app.drive_id }}</td>
-<td>{{ app.status }}</td>
-<td>{{ app.applied_on }}</td>
+<td>[[ app.id ]]</td>
+<td>[[ app.student_id ]]</td>
+<td>[[ app.drive_id ]]</td>
+<td>[[ app.status ]]</td>
+<td>[[ app.applied_on ]]</td>
+
 </tr>
-
-{% endfor %}
 
 </table>
 
 <a href="/admin/dashboard" class="btn btn-secondary">Back</a>
+
+</div>
+
+
+<script>
+
+const { createApp } = Vue
+
+createApp({
+
+delimiters: ['[[', ']]'],
+
+data() {
+return {
+
+applications: {{ applications | tojson }}
+
+}
+}
+
+}).mount("#app")
+
+</script>
 
 {% endblock %}

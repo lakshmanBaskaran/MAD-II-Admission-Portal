@@ -8,7 +8,9 @@
 
 <tr>
 <th>Application ID</th>
-<th>Student ID</th>
+<th>Student Name</th>
+<th>CGPA</th>
+<th>Resume</th>
 <th>Status</th>
 <th>Update Status</th>
 </tr>
@@ -18,7 +20,25 @@
 <tr>
 
 <td>{{ app.id }}</td>
-<td>{{ app.student_id }}</td>
+
+<td>
+{{ app.student_name }} (ID: {{ app.student_id }})
+</td>
+
+<td>
+{{ app.cgpa }}
+</td>
+
+<td>
+{% if app.resume %}
+<a href="/company/download_resume/{{ app.student_id }}" target="_blank">
+Download Resume
+</a>
+{% else %}
+No Resume
+{% endif %}
+</td>
+
 <td>{{ app.status }}</td>
 
 <td>
